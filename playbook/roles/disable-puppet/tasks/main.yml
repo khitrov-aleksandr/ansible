@@ -1,0 +1,9 @@
+- name: Stop and disable Puppet Agent
+  service:
+    name: puppet
+    state: stopped
+    enabled: no
+  tags:
+    - puppet
+  ignore_errors: yes
+  become: yes

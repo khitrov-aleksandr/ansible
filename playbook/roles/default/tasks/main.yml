@@ -1,0 +1,65 @@
+---
+
+- name: Install default packages
+  import_tasks: packages/main.yml
+  become: yes
+  ignore_errors: yes
+  tags:
+    - packages
+
+- name: Disable SELinux
+  import_tasks: selinux.yml
+  become: yes
+  tags:
+    - selinux
+
+- name: Add users and ssh-keys
+  import_tasks: user.yml
+  become: yes
+  tags:
+    - users
+
+- name: Disable firewall
+  import_tasks: firewall.yml
+  become: yes
+  tags:
+    - firewall
+
+- name: Set prompt color
+  import_tasks: prompt.yml
+  become: yes
+  tags:
+    - prompt
+
+- name: Set timezone to "{{ timezone }}"
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+  tags:
+    - timezone
+
+- name: Syncronize time and set NTP
+  import_tasks: ntp.yml
+  become: yes
+  tags:
+    - ntp
+
+- name: Install Zabbix Agent
+  import_tasks: zabbix.yml
+  become: yes
+  tags:
+    - zabbix
+
+- name: Install HP SNMP Agents
+  import_tasks: hp.yml
+  become: yes
+  tags:
+    - hp
+  when: ansible_facts['system_vendor'] == "HP"
+
+- name: Install VMware Tools
+  import_tasks: vmware.yml
+  become: yes
+  tags:
+    - vmware
+  when: ansible_facts['product_name']|lower is search("vmware")

@@ -1,0 +1,34 @@
+- name: Delete old VMware Tools tmp directory
+  file:
+    state: absent
+    path: "/tmp/{{ vmware_tools_dir }}"
+
+- name: Uninstall TAR VMware Tools
+  command: vmware-uninstall-tools.pl
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version']|int >= 7
+
+- name: Install open-vm-tools
+  yum:
+    name: open-vm-tools
+  notify:
+    - restart vmtoolsd
+  when: ansible_facts['distribution_major_version']|int >= 7
+
+- name: Download and unarchive VMware Tools Files
+  unarchive:
+    src: "{{ vmware_tools_url }}/{{ vmware_tools_file }}"
+    dest: /tmp
+    remote_src: yes
+  when: ansible_facts['distribution_major_version']|int <= 6
+
+- name: Install VMware Tools
+  command: /tmp/vmware-tools-distrib/vmware-install.pl -d
+  become: yes
+  when: ansible_facts['distribution_major_version']|int <= 6
+
+- name: Remove VMware Tools distribution files
+  file:
+    state: absent
+    path: "/tmp/{{ vmware_tools_dir }}"
+  when: ansible_facts['distribution_major_version']|int <= 6

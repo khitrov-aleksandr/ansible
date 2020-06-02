@@ -1,0 +1,29 @@
+---
+
+- hosts: siebel-dev
+  vars:
+    env: test
+  roles:
+    - disable-puppet
+    - default
+
+- hosts: siebel-test
+  vars:
+    env: test
+  roles:
+    - disable-puppet
+    - default
+
+- hosts: siebel-stage
+  vars:
+    env: stage
+  roles:
+    - disable-puppet
+    - default
+
+- hosts: siebel-prod
+  vars:
+    env: prod
+  roles:
+    - disable-puppet
+    - default

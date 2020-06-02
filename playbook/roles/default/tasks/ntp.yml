@@ -1,0 +1,18 @@
+- name: Configure Chrony
+  template:
+    src: templates/chrony.j2
+    dest: /etc/chrony.conf
+  notify:
+    - restart chrony
+  when: ansible_facts['distribution_major_version']|int > 6
+        and ansible_facts['hostname'] != 'jump01'
+        and ansible_facts['hostname'] != 'jump02'
+        and ansible_facts['hostname'] != 'mx1'
+        and ansible_facts['hostname'] != 'mx2'
+
+- name: Configure ntp(add ntpdate periodicaly script)
+  template:
+    src: templates/ntpdate.j2
+    dest: /etc/cron.hourly/ntpdate
+    mode: 0755
+  when: ansible_facts['distribution_major_version']|int < 7

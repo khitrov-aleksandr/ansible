@@ -1,0 +1,25 @@
+---
+
+- name: restart snmpd
+  service:
+    name: snmpd
+    state: restarted
+  become: yes
+
+- name: restart zabbix agent
+  service:
+    name: zabbix-agent
+    state: restarted
+  become: yes
+
+- name: restart chrony
+  service:
+    name: chronyd
+    state: restarted
+  become: yes
+
+- name: restart vmtoolsd
+  service:
+    name: vmtoolsd
+    state: restarted
+  become: yes

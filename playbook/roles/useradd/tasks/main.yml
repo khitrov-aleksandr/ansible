@@ -1,0 +1,8 @@
+---
+# tasks file for useradd
+- name: createuser
+  become: yes
+  user: name={{user}}  shell=/bin/bash password=$6$yHoO4yOa$onVXoN1hUIbvNXPUe5K.olUPPlBu3IpttruRPn/3OVb679ACpPn.vYIa3dXD5y9rsuUGxXxw.AA0uV.CZ0Ull1
+- name: set temppasswd
+  become: yes
+  command: passwd -e {{user}} 

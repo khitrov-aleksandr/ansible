@@ -1,0 +1,25 @@
+- name: Set YUM repository for Zabbix
+  yum_repository:
+    name: zabbix
+    description: Zabbix repository
+    baseurl: "{{ zabbix_repo_baseurl }}"
+    gpgcheck: yes
+    gpgkey: "{{ zabbix_repo_gpgkey }}"
+
+- name: Install Zabbix Agent
+  yum:
+    name: zabbix-agent
+    state: latest
+
+- name: Configure Zabbix Agent for Renins
+  template:
+    src: templates/zabbix_agent_passive.j2
+    dest: /etc/zabbix/zabbix_agentd.d/myorg.conf
+  notify:
+    - restart zabbix agent
+
+- name: Start and add to autorun Zabbix Agent
+  service:
+    name: zabbix-agent
+    state: started
+    enabled: yes

@@ -1,0 +1,29 @@
+---
+# tasks file for deploy_NGINX
+
+- block: #===========Red HAT Family============
+    - name: Install NGINX (Red Hat Family)
+      yum: name=nginx state=latest
+    - name: Start and startup on bootup NGINX
+      service: name=nginx state=started enabled=yes
+  when: ansible_os_family == "RedHat"
+
+- block: #===========Debian  Family============
+    - name: Install (Debian Family)
+      apt: name=nginx state=latest
+    - name: Start and startup on bootup NGINX
+      service: name=nginx state=started enabled=yes
+  when: ansible_os_family == "Debian"
+
+
+
+
+
+
+
+
+
+
+
+
+

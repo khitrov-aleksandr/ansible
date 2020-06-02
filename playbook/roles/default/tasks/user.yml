@@ -1,0 +1,30 @@
+- name: Add biker user
+  user:
+    name: biker
+    comment: Khitrov Aleksandr
+    groups: wheel
+    password: "$6$sd;alfkja;dklfja$1jF/imMzkPJ9ila1T0mYamenjb1KHhREW6gOHn/hFXQDbEdWGMmJUSOp6wZfziy4R999toF/Si//EgZd9bFoy/"
+
+- name: Add ssh-key for biker user
+  authorized_key:
+    user: biker
+    key: "{{ lookup('file', 'roles/default/files/biker_authorized_keys') }}"
+
+- name: Add ssh-key for root user
+  authorized_key:
+    user: root
+    key: "{{ lookup('file', 'roles/default/files/root_authorized_keys') }}"
+
+#Kleusov Vladimir
+#- name: Add kleusvl user
+#  user:
+#    name: kleusvl
+#    comment: Kleusov Vladimir
+#    groups: wheel
+#    password: "$6$mysecretsalt$1bY6Ttrs6mj1lesOSvwKk2MSDU5WgflHqFCjL5PKRLe3ae0D/kfbhzhPpg4wwA7Z8Dkjq0pUTLMu9QLnU93ii."
+#
+#- name: Add ssh-key for kleusvl user
+#  authorized_key:
+#    user: kleusvl
+#    key: "{{ lookup('file', 'roles/default/files/kleusvl_authorized_keys') }}"
+

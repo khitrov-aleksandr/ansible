@@ -1,0 +1,7 @@
+#!/bin/sh
+
+NTP_SERVERS_LIST="{{ ntp_server1}} {{ ntp_server2 }}"
+
+ntpdate -u $NTP_SERVERS_LIST > /dev/null
+
+exit 0

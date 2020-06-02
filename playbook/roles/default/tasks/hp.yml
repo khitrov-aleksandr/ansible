@@ -1,0 +1,30 @@
+- name: Set YUM repository for HPE
+  yum_repository:
+    name: HP-spp
+    description: HP Software Delivery Repository for spp
+    baseurl: "{{ hp_repo_baseurl }}"
+    gpgcheck: no
+
+- name: Install HP utilites (hp-snmp-agents, ssacli etc.)
+  yum:
+    name: "{{ hp_packages_list }}"
+
+- name: Configure net-snmp for HP SNMP Agents
+  blockinfile:
+    insertbefore: BOF
+    path: /etc/snmp/snmpd.conf
+    content: |
+      dlmod cmaX /usr/lib64/libcmaX64.so
+      rocommunity  public
+
+- name: Start and add to autorun SNMPd
+  service:
+    name: snmpd
+    state: started
+    enabled: yes
+
+- name: Start and add to autorun HP SNMP Agents
+  service:
+    name: hp-snmp-agents
+    state: started
+    enabled: yes

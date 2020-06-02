@@ -1,0 +1,74 @@
+- name: Setup local repository for RHEL 7
+  yum_repository:
+    name: local
+    description: Local repository for RHEL
+    baseurl: "{{ local_repo_baseurl }}"
+    gpgcheck: yes
+    gpgkey: "{{ local_repo_gpgkey }}"
+    proxy: _none_
+  when: ansible_facts['distribution']|lower == "redhat" and ansible_facts['distribution_major_version']|int == 7 and "clx" not in ansible_facts['hostname']
+
+- name: Setup local repository for RHEL 6, 5
+  yum_repository:
+    name: local
+    description: Local repository for RHEL
+    baseurl: "{{ local_repo_baseurl_old }}"
+    gpgcheck: yes
+    gpgkey: "{{ local_repo_gpgkey }}"
+    proxy: _none_
+  when: ansible_facts['distribution']|lower == "redhat" and ansible_facts['distribution_major_version']|int < 7 and "clx" not in ansible_facts['hostname']
+
+- name: Install libselinux-python
+  yum:
+    name: libselinux-python
+  when: ansible_facts['distribution_major_version']|int < 8
+
+- name: Set proxy for yum
+  lineinfile:
+    regexp: '^proxy='
+    path: /etc/yum.conf
+    line: proxy={{ http_proxy }}
+  when: ansible_facts['default_ipv4']['network'] is not search("192.168") and ansible_facts['distribution_major_version']|int < 8
+
+- name: Clean YUM cache
+  command: rm -rf /var/cache/yum/* && yum clean all
+  args:
+    warn: false
+  when: ansible_facts['distribution_major_version']|int < 8
+
+- name: YUM Make Cache
+  command: yum makecache fast
+  args:
+    warn: false
+  when: ansible_facts['distribution_major_version']|int < 8
+
+- name: Install default packages
+  yum:
+    name: "{{ packages_list }}"
+  when: ansible_facts['distribution_major_version']|int < 8
+
+
+# CentOS(RHEL) 9
+- name: Set proxy for yum
+  lineinfile:
+    regexp: '^proxy='
+    path: /etc/dnf/dnf.conf
+    line: proxy={{ http_proxy }}
+  when: ansible_facts['default_ipv4']['network'] is not search("192.168") and ansible_facts['distribution_major_version']|int == 8
+
+- name: Clean DNF cache
+  command: dnf clean all
+  args:
+    warn: false
+  when: ansible_facts['distribution_major_version']|int == 8
+
+- name: DNF Make Cache
+  command: dnf makecache
+  args:
+    warn: false
+  when: ansible_facts['distribution_major_version']|int == 8
+
+- name: Install default packages
+  dnf:
+    name: "{{ packages_list_dnf }}"
+  when: ansible_facts['distribution_major_version']|int == 8

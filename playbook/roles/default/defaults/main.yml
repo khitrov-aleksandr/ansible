@@ -1,0 +1,87 @@
+#Local YUM repository
+local_repo_baseurl: http://yum.mos.domain.ru/$releasever
+local_repo_baseurl_old: http://yum.mos.domain.ru/$releasever/Server
+local_repo_gpgkey: http://yum.mos.domain.ru/$releasever/RPM-GPG-KEY-redhat-release
+
+#Proxy
+http_proxy: http://infr-b:3128
+
+#Zabbix
+zabbix_repo_baseurl: http://repo.zabbix.com/zabbix/4.4/rhel/{{ ansible_facts['distribution_major_version'] }}/$basearch/
+zabbix_repo_gpgkey: http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591
+zabbix_servers: 10.50.11.89,10.50.11.135
+zabbix_active_servers: 10.50.11.89
+
+#HP
+hp_repo_baseurl: http://downloads.linux.hpe.com/SDR/repo/spp/RedHatEnterpriseServer/$releasever/$basearch/current
+
+#DNS
+dns_server1: 10.50.0.1
+dns_server2: 10.50.0.43
+
+#NTP
+ntp_server1: 10.50.12.248
+ntp_server2: 10.50.12.98
+
+#Timezone
+timezone: "Europe/Moscow"
+
+#Default packages
+packages_list: [ 'telnet',
+                'mc',
+                'vim-enhanced',
+                'mailx',
+                'bind-utils',
+                'rsync',
+                'wget',
+                'ntp',
+                'tcpdump',
+                'man',
+                'openssh-clients',
+                'pciutils',
+                'xorg-x11-xauth',
+                'xorg-x11-apps',
+                'ftp',
+                'redhat-lsb',
+                'unzip',
+                'nfs-utils',
+                'device-mapper-multipath',
+                'sg3_utils',
+                'lsof',
+                'sysstat',
+                'screen',
+                'sudo',
+                'net-tools',
+                'yum-utils' ]
+
+packages_list_dnf: [ 'telnet',
+                'mc',
+                'vim-enhanced',
+                'mailx',
+                'bind-utils',
+                'rsync',
+                'wget',
+                'tcpdump',
+                'man',
+                'openssh-clients',
+                'xorg-x11-xauth',
+                'pciutils',
+                'ftp',
+                'redhat-lsb',
+                'unzip',
+                'nfs-utils',
+                'device-mapper-multipath',
+                'sg3_utils',
+                'lsof',
+                'sysstat',
+                'sudo',
+                'net-tools',
+                'yum-utils' ]
+
+#HP Packages
+hp_packages_list: ['hp-snmp-agents', 'ssacli']
+
+#VMware tools
+vmware_tools_url: http://infr-b/vmware
+vmware_tools_file: VMwareTools-10.3.10-12406962.tar.gz
+vmware_tools_dir: vmware-tools-distrib

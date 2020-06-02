@@ -1,0 +1,34 @@
+---
+# tasks file for deploy_DOCKER
+- block: #===========Red HAT Family============
+    - name: Add Docker Repo (Red Hat Family)
+      get_url:
+       validate_certs: no
+       url: https://download.docker.com/linux/centos/docker-ce.repo
+       dest: /etc/yum.repos.d/
+    - name: Install docker (Red Hat Family)
+      yum: name=docker state=latest
+    - name: Start and startup on bootup docker
+      service: name=docker state=started enabled=yes
+  when: ansible_os_family == "RedHat"
+
+- block: #===========Debian  Family============
+    - name: Install additional packages (Debian Family)
+      apt:
+       name: ['apt-transport-https','ca-certificates','curl','gnupg2','software-properties-common','wget']
+       state: present
+    - name:  Add Docker GPG key (Debian Family)
+      apt_key: 
+       url: https://download.docker.com/linux/debian/gpg
+       state: present 
+    - name: Add Docker Repo (Debian Family)    
+      apt_repository:
+       repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+    - name: Install Docker (Debian Family)
+      apt:
+       name: ['docker-ce']
+       state: present
+       update_cache: yes
+    - name: Start and startup on bootup docker
+      service: name=docker state=started enabled=yes
+  when: ansible_os_family == "Debian"

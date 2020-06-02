@@ -1,0 +1,6 @@
+- name: Setup yum repository
+  command: curl -sL https://rpm.nodesource.com/setup_8.x | bash -
+  become: yes
+  tags:
+    - 8
+  when: ansible_facts['distribution']|lower == "redhat" and ansible_facts['distribution_major_version']|int >= 7
